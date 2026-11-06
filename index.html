@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kouame Paul Michel N’Guessan – Développeur Fullstack</title>
+<meta name="description" content="Portfolio de Kouame Paul Michel N’Guessan, développeur fullstack web et mobile (Laravel, React) à Casablanca.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@500;700;800&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0A24; --surface:#181238; --ink:#F4F1FF; --muted:#A9A3C9; --line:#2E2765;
+  --coral:#FF5D8F; --cyan:#3DE0FF; --sun:#FFC857;
+  --display:"Bricolage Grotesque","Trebuchet MS",sans-serif; --text:"Public Sans",system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1rem/1.65 var(--text);overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(600px 420px at 85% 4%,rgba(255,93,143,.28),transparent 70%),radial-gradient(560px 420px at 4% 30%,rgba(61,224,255,.16),transparent 70%)}
+a{color:var(--cyan)}
+:focus-visible{outline:3px solid var(--sun);outline-offset:3px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 1.25rem}
+header.top{display:flex;justify-content:space-between;align-items:center;padding:1.3rem 0}
+header.top b{font:800 1.1rem var(--display);letter-spacing:-.01em}
+nav a{margin-left:1.4rem;color:var(--muted);text-decoration:none;font-weight:500}
+nav a:hover{color:var(--ink)}
+.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:2.5rem;align-items:center;padding:4.5rem 0 4rem}
+.hero .hi{color:var(--sun);font-weight:600;margin:0 0 .8rem}
+.hero h1{font:800 clamp(2.7rem,8vw,5.4rem)/.98 var(--display);letter-spacing:-.035em;margin:0 0 1.4rem}
+.hero h1 em{font-style:normal;background:linear-gradient(95deg,var(--coral),var(--sun));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{max-width:52ch;color:var(--muted);font-size:1.12rem;margin:0 0 2rem}
+.btns{display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{display:inline-block;padding:.85rem 1.5rem;border-radius:999px;font:600 1rem var(--text);text-decoration:none;border:2px solid var(--line);color:var(--ink);background:transparent;cursor:pointer}
+.btn.main{background:var(--coral);border-color:var(--coral);color:#1A0B1F}
+.btn:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn.main:hover{background:var(--sun);border-color:var(--sun);color:#1A0B1F}
+.side{display:flex;flex-direction:column;align-items:center;gap:1.4rem}
+.photo{width:170px;height:170px;border-radius:50%;object-fit:cover;border:4px solid var(--coral);display:none}
+.photo.on{display:block}
+.code{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.2rem 1.3rem;font:500 .88rem/1.7 ui-monospace,Menlo,Consolas,monospace;color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.4);margin:0;overflow-x:auto}
+.code .k{color:var(--coral)}.code .s{color:var(--sun)}.code .c{color:var(--cyan)}
+section{padding:3.5rem 0}
+h2{font:800 clamp(1.9rem,4vw,2.6rem)/1.1 var(--display);letter-spacing:-.025em;margin:0 0 1.6rem}
+.filters{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.6rem}
+.chip{border:1.5px solid var(--line);background:transparent;border-radius:999px;padding:.35rem 1rem;font:500 .9rem var(--text);cursor:pointer;color:var(--muted)}
+.chip:hover{color:var(--ink);border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.projects{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.3rem}
+.card{background:var(--surface);border:1px solid var(--line);border-top:5px solid var(--c);border-radius:16px;padding:1.5rem;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-4px);border-color:var(--c)}
+.card .meta{color:var(--c);font-weight:600;font-size:.9rem;margin-bottom:.5rem}
+.card h3{font:700 1.3rem/1.25 var(--display);margin:0 0 .6rem}
+.card p{margin:0 0 .8rem;color:var(--muted)}
+.card ul{margin:0 0 1rem;padding-left:1.1rem;color:var(--ink);font-size:.95rem}
+.card li{margin-bottom:.3rem}
+.tags{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:auto;padding-top:.4rem}
+.tags span{border:1px solid var(--line);border-radius:999px;padding:.1rem .7rem;font-size:.82rem;font-weight:500}
+.links{margin-top:1rem}
+.links a{margin-right:1.2rem;font-weight:600;color:var(--c)}
+.empty{color:var(--muted)}
+.skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1.3rem}
+.skills>div{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:1.4rem}
+.skills h3{font:700 1.15rem var(--display);margin:0 0 .5rem;color:var(--sun)}
+.skills p{margin:0;color:var(--muted)}
+.about{max-width:62ch;color:var(--muted);font-size:1.1rem}
+#contact-lines{margin:0 0 1.6rem}
+form{display:grid;gap:.9rem;max-width:540px}
+label{font-weight:600;font-size:.95rem}
+input,textarea{width:100%;padding:.8rem .9rem;border:1.5px solid var(--line);border-radius:12px;font:inherit;background:var(--surface);color:var(--ink)}
+input:focus,textarea:focus{border-color:var(--cyan);outline:none}
+.btn.send{justify-self:start}
+#status{min-height:1.5rem;font-weight:500;color:var(--sun)}
+footer{padding:2rem 0 3rem;color:var(--muted);border-top:1px solid var(--line);font-size:.9rem}
+@media(max-width:800px){.hero{grid-template-columns:1fr;padding:2.5rem 0}.side{align-items:flex-start}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.card{transition:none}.card:hover{transform:none}}
+.totop{position:fixed;right:1.2rem;bottom:1.2rem;width:3rem;height:3rem;border-radius:50%;border:0;background:var(--coral);color:#1A0B1F;cursor:pointer;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .25s,transform .25s,visibility .25s}
+.totop.show{opacity:1;visibility:visible;transform:none}
+.totop:hover{background:var(--sun)}
+.totop svg{width:1.3rem;height:1.3rem}
+@media(prefers-reduced-motion:reduce){.totop{transition:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <b>Kouame N’Guessan</b>
+    <nav aria-label="Navigation principale"><a href="#projets">Projets</a><a href="#competences">Compétences</a><a href="#contact">Contact</a></nav>
+  </header>
+
+  <main>
+    <div class="hero">
+      <div>
+        <p class="hi">Bonjour, je suis</p>
+        <h1><em>Kouame Paul Michel</em> N’Guessan</h1>
+        <p class="lead" id="hero-text"></p>
+        <div class="btns">
+          <a class="btn main" href="#projets">Voir mes projets</a>
+          <a class="btn" href="#contact">Me contacter</a>
+        </div>
+      </div>
+      <div class="side">
+        <img class="photo" id="photo" alt="Portrait de Kouame Paul Michel N’Guessan">
+        <pre class="code" aria-hidden="true"><span class="k">const</span> kouame = {
+  metier: <span class="s">"Développeur Fullstack"</span>,
+  stack: [<span class="s">"Laravel"</span>, <span class="s">"React"</span>, <span class="s">"MySQL"</span>],
+  base: <span class="s">"Casablanca"</span>,
+  dispo: <span class="s">"Stage / alternance"</span>
+};</pre>
+      </div>
+    </div>
+
+    <section id="projets">
+      <h2>Projets</h2>
+      <div class="filters" id="filters" role="group" aria-label="Filtrer par technologie"></div>
+      <div class="projects" id="projects"></div>
+    </section>
+
+    <section id="competences">
+      <h2>Compétences</h2>
+      <div class="skills" id="skills"></div>
+    </section>
+
+    <section id="apropos">
+      <h2>À propos</h2>
+      <p class="about" id="about"></p>
+    </section>
+
+    <section id="contact">
+      <h2>Contact</h2>
+      <p id="contact-lines"></p>
+      <form id="contact-form">
+        <div><label for="name">Nom</label><input id="name" name="from_name" required autocomplete="name"></div>
+        <div><label for="email">Email</label><input id="email" name="reply_to" type="email" required autocomplete="email"></div>
+        <div><label for="msg">Message</label><textarea id="msg" name="message" rows="5" required></textarea></div>
+        <button class="btn main send" type="submit">Envoyer le message</button>
+        <div id="status" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer>© <span id="year"></span> Kouame Paul Michel N’Guessan · Casablanca, Maroc</footer>
+</div>
+
+<button class="totop" id="totop" type="button" aria-label="Retour en haut de la page">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+/* ============================================================
+   1. TES INFOS : modifie ici (textes, liens, contact)
+   ============================================================ */
+const PROFILE = {
+  heroText: "Développeur fullstack web et mobile à Casablanca. Je conçois des applications de A à Z, de l’interface à l’API et à la base de données, avec Laravel, React et MySQL. Je suis disponible pour un stage ou une alternance.",
+  photo: "",   // ex : "moi.jpg" (mets ta photo dans le même dossier) ou laisse vide
+  about: "Rigoureux et orienté vers les résultats, j’aime travailler en équipe et prendre des initiatives. J’utilise aussi l’intelligence artificielle comme outil de travail pour coder plus efficacement, déboguer et apprendre plus vite.",
+  email: "kouamepaulmichel@gmail.com",
+  phone: "+212 695514635",
+  github: "https://github.com/NKMpaul",    // ex : "https://github.com/ton-pseudo"
+  linkedin: "https://www.linkedin.com/in/kouame-paul-michel-n%E2%80%99guessan-65478b304/",  // ex : "https://www.linkedin.com/in/ton-profil"
+  cv: "CV_Kouame_Nguessan.pdf" // mets le PDF dans le même dossier, ou laisse "" pour masquer
+};
+
+/* Formulaire de contact (EmailJS). Laisse vide pour ouvrir ton application mail à la place. */
+const EMAILJS = { publicKey: "65Ulxck_4WK68gdJv", serviceId: "service_am56ku8", templateId: "template_1ee56wd" };
+
+const SKILLS = [
+  { title: "Back-end",  text: "PHP, Laravel, MySQL, API REST, authentification JWT" },
+  { title: "Front-end", text: "React.js, JavaScript (ES6+), HTML5, CSS3, Responsive Design" },
+  { title: "Outils",    text: "Git, GitHub, UML, optimisation de performances, IA comme aide au développement" }
+];
+
+/* ============================================================
+   2. TES PROJETS : un bloc { ... } par projet.
+   Option : ajoute color: "#FF5D8F" dans un bloc pour choisir sa couleur.
+   Pour AJOUTER un projet : copie un bloc, colle-le en haut de la liste
+   (le plus récent d’abord), sépare les blocs par une virgule.
+   Pour SUPPRIMER : efface le bloc. Un lien laissé vide ("") n’est pas affiché.
+   ============================================================ */
+const PROJECTS = [
+  {
+    title: "Plateforme de mise en relation clients–prestataires",
+    year: "2026",
+    subtitle: "Projet de soutenance, IFIAG Casablanca",
+    summary: "Plateforme fullstack qui met en relation des clients et des prestataires de services d’aide à domicile.",
+    highlights: [
+      "Back-end PHP (Laravel) et MySQL : utilisateurs, annonces, réservations et disponibilités",
+      "Front-end React.js : recherche avancée (localisation, tarifs, services) et réservation en temps réel",
+      "Authentification sécurisée (JWT) et interface d’administration des prestataires"
+    ],
+    stack: ["Laravel", "React", "MySQL", "JWT"],
+    demo: "",
+    github: ""
+  },
+  {
+    title: "Application web et mobile pour une franchise de pressing",
+    year: "2025",
+    subtitle: "Stage chez Lumiatech, en télétravail",
+    summary: "Application pour moderniser la gestion des commandes et des rendez-vous d’une franchise de pressing.",
+    highlights: [
+      "Interfaces responsives avec React.js",
+      "Intégration d’API REST pour synchroniser l’application mobile et le dashboard administrateur",
+      "Travail en équipe via GitHub : suivi des versions et revue de code"
+    ],
+    stack: ["React", "API REST", "GitHub"],
+    demo: "",
+    github: ""
+  },
+  {
+    title: "Boutique en ligne",
+    year: "2025",
+    subtitle: "Projet de 1ère année, IFIAG Casablanca",
+    summary: "Interface complète d’un site e-commerce, compatible mobile, tablette et ordinateur.",
+    highlights: [
+      "Interface réalisée en HTML5 et CSS3",
+      "Responsive Design sur tous les écrans"
+    ],
+    stack: ["HTML", "CSS"],
+    demo: "",
+    github: ""
+  }
+];
+
+/* ============================================================
+   3. CODE DU SITE : tu n’as normalement rien à changer ici
+   ============================================================ */
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+$("#hero-text").textContent = PROFILE.heroText;
+$("#about").textContent = PROFILE.about;
+if (PROFILE.photo) { $("#photo").src = PROFILE.photo; $("#photo").classList.add("on"); }
+$("#year").textContent = new Date().getFullYear();
+
+$("#skills").innerHTML = SKILLS.map((s) => `<div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join("");
+
+const contactLinks = [
+  `<a href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>`,
+  `<a href="tel:${esc(PROFILE.phone.replace(/\s/g, ""))}">${esc(PROFILE.phone)}</a>`,
+  PROFILE.github && `<a href="${esc(PROFILE.github)}" target="_blank" rel="noopener">GitHub</a>`,
+  PROFILE.linkedin && `<a href="${esc(PROFILE.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`,
+  PROFILE.cv && `<a href="${esc(PROFILE.cv)}" download>Télécharger mon CV</a>`
+].filter(Boolean);
+$("#contact-lines").innerHTML = contactLinks.join(" &nbsp;|&nbsp; ");
+
+let active = "Tous";
+const COLORS = ["#FF5D8F", "#3DE0FF", "#FFC857", "#A594FF"];
+function renderProjects() {
+  const list = PROJECTS.filter((p) => active === "Tous" || p.stack.includes(active));
+  $("#projects").innerHTML = list.length ? list.map((p, i) => `
+    <article class="card" style="--c:${p.color || COLORS[i % COLORS.length]}">
+      <div class="meta">${esc(p.year)}${p.subtitle ? " · " + esc(p.subtitle) : ""}</div>
+      <h3>${esc(p.title)}</h3>
+      <p>${esc(p.summary)}</p>
+      <ul>${(p.highlights || []).map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
+      <div class="tags">${p.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
+      ${(p.demo || p.github) ? `<div class="links">
+        ${p.demo ? `<a href="${esc(p.demo)}" target="_blank" rel="noopener">Voir la démo</a>` : ""}
+        ${p.github ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">Voir le code</a>` : ""}
+      </div>` : ""}
+    </article>`).join("") : `<p class="empty">Aucun projet avec cette technologie pour le moment.</p>`;
+}
+function renderFilters() {
+  const techs = ["Tous", ...new Set(PROJECTS.flatMap((p) => p.stack))];
+  $("#filters").innerHTML = techs.map((t) => `<button class="chip" type="button" aria-pressed="${t === active}" data-t="${esc(t)}">${esc(t)}</button>`).join("");
+}
+$("#filters").addEventListener("click", (e) => {
+  const b = e.target.closest(".chip");
+  if (!b) return;
+  active = b.dataset.t;
+  renderFilters();
+  renderProjects();
+});
+renderFilters();
+renderProjects();
+
+/* Formulaire de contact */
+const form = $("#contact-form"), status = $("#status");
+form.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const d = Object.fromEntries(new FormData(form));
+  /* Noms alternatifs, pour que ton ancien template EmailJS fonctionne quelles que soient ses variables */
+  Object.assign(d, { name: d.from_name, user_name: d.from_name, email: d.reply_to, user_email: d.reply_to, from_email: d.reply_to, title: "Nouveau message depuis ton portfolio", time: new Date().toLocaleString("fr-FR") });
+  const useEmailJS = EMAILJS.publicKey && EMAILJS.serviceId && EMAILJS.templateId;
+  if (!useEmailJS) {
+    const body = encodeURIComponent(`${d.message}\n\n${d.from_name} (${d.reply_to})`);
+    location.href = `mailto:${PROFILE.email}?subject=${encodeURIComponent("Message depuis ton portfolio")}&body=${body}`;
+    status.textContent = "Ton application mail s’ouvre pour envoyer le message.";
+    return;
+  }
+  status.textContent = "Envoi en cours…";
+  const sendBtn = form.querySelector('button[type="submit"]');
+  sendBtn.disabled = true;
+  const send = () => emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, d, { publicKey: EMAILJS.publicKey })
+    .then(() => { status.textContent = "Message envoyé. Merci !"; form.reset(); })
+    .catch((err) => { console.error("Erreur EmailJS:", err); status.textContent = "L’envoi a échoué. Réessaie plus tard ou écris-moi à " + PROFILE.email + "."; })
+    .finally(() => { sendBtn.disabled = false; });
+  if (window.emailjs) return send();
+  const s = document.createElement("script");
+  s.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js";
+  s.onload = send;
+  s.onerror = () => { status.textContent = "Impossible de charger le service d’envoi. Utilise l’email ci-dessus."; };
+  document.head.appendChild(s);
+});
+
+/* Bouton « retour en haut » */
+const topBtn = $("#totop");
+const toggleTop = () => topBtn.classList.toggle("show", window.scrollY > 400);
+window.addEventListener("scroll", toggleTop, { passive: true });
+toggleTop();
+topBtn.addEventListener("click", () => {
+  const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  window.scrollTo({ top: 0, behavior: calm ? "auto" : "smooth" });
+});
+</script>
+</body>
+</html>
