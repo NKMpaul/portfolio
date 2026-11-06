@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Kouame Paul Michel N’Guessan – Développeur Fullstack</title>
 <meta name="description" content="Portfolio de Kouame Paul Michel N’Guessan, développeur fullstack web et mobile (Laravel, React) à Casablanca.">
@@ -131,9 +132,10 @@ footer{padding:2rem 0 3rem;color:var(--muted);border-top:1px solid var(--line);f
       <h2>Contact</h2>
       <p id="contact-lines"></p>
       <form id="contact-form">
-        <div><label for="name">Nom</label><input id="name" name="from_name" required autocomplete="name"></div>
-        <div><label for="email">Email</label><input id="email" name="reply_to" type="email" required autocomplete="email"></div>
-        <div><label for="msg">Message</label><textarea id="msg" name="message" rows="5" required></textarea></div>
+        <div><label for="name">Nom</label><input id="name" name="from_name" maxlength="80" required autocomplete="name"></div>
+        <div><label for="email">Email</label><input id="email" name="reply_to" type="email" maxlength="120" required autocomplete="email"></div>
+        <div><label for="msg">Message</label><textarea id="msg" name="message" rows="5" maxlength="2000" required></textarea></div>
+        <div style="position:absolute;left:-9999px" aria-hidden="true"><label>Ne pas remplir<input name="website" tabindex="-1" autocomplete="off"></label></div>
         <button class="btn main send" type="submit">Envoyer le message</button>
         <div id="status" role="status" aria-live="polite"></div>
       </form>
@@ -228,9 +230,14 @@ const PROJECTS = [
 const $ = (s) => document.querySelector(s);
 const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 
+/* Sécurité : n’accepte que des liens http(s), mailto, tel ou des fichiers du site */
+const safeUrl = (u) => (/^(https?:\/\/|mailto:|tel:)/i.test(u) || /^[\w.\-\/]+$/.test(u)) ? u : "";
+const safeGet = (k) => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const safeSet = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
+
 $("#hero-text").textContent = PROFILE.heroText;
 $("#about").textContent = PROFILE.about;
-if (PROFILE.photo) { $("#photo").src = PROFILE.photo; $("#photo").classList.add("on"); }
+if (PROFILE.photo) { $("#photo").src = safeUrl(PROFILE.photo); $("#photo").classList.add("on"); }
 $("#year").textContent = new Date().getFullYear();
 
 $("#skills").innerHTML = SKILLS.map((s) => `<div><h3>${esc(s.title)}</h3><p>${esc(s.text)}</p></div>`).join("");
@@ -238,9 +245,9 @@ $("#skills").innerHTML = SKILLS.map((s) => `<div><h3>${esc(s.title)}</h3><p>${es
 const contactLinks = [
   `<a href="mailto:${esc(PROFILE.email)}">${esc(PROFILE.email)}</a>`,
   `<a href="tel:${esc(PROFILE.phone.replace(/\s/g, ""))}">${esc(PROFILE.phone)}</a>`,
-  PROFILE.github && `<a href="${esc(PROFILE.github)}" target="_blank" rel="noopener">GitHub</a>`,
-  PROFILE.linkedin && `<a href="${esc(PROFILE.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>`,
-  PROFILE.cv && `<a href="${esc(PROFILE.cv)}" download>Télécharger mon CV</a>`
+  PROFILE.github && `<a href="${esc(safeUrl(PROFILE.github))}" target="_blank" rel="noopener">GitHub</a>`,
+  PROFILE.linkedin && `<a href="${esc(safeUrl(PROFILE.linkedin))}" target="_blank" rel="noopener">LinkedIn</a>`,
+  PROFILE.cv && `<a href="${esc(safeUrl(PROFILE.cv))}" download>Télécharger mon CV</a>`
 ].filter(Boolean);
 $("#contact-lines").innerHTML = contactLinks.join(" &nbsp;|&nbsp; ");
 
@@ -256,8 +263,8 @@ function renderProjects() {
       <ul>${(p.highlights || []).map((h) => `<li>${esc(h)}</li>`).join("")}</ul>
       <div class="tags">${p.stack.map((t) => `<span>${esc(t)}</span>`).join("")}</div>
       ${(p.demo || p.github) ? `<div class="links">
-        ${p.demo ? `<a href="${esc(p.demo)}" target="_blank" rel="noopener">Voir la démo</a>` : ""}
-        ${p.github ? `<a href="${esc(p.github)}" target="_blank" rel="noopener">Voir le code</a>` : ""}
+        ${p.demo ? `<a href="${esc(safeUrl(p.demo))}" target="_blank" rel="noopener">Voir la démo</a>` : ""}
+        ${p.github ? `<a href="${esc(safeUrl(p.github))}" target="_blank" rel="noopener">Voir le code</a>` : ""}
       </div>` : ""}
     </article>`).join("") : `<p class="empty">Aucun projet avec cette technologie pour le moment.</p>`;
 }
@@ -280,6 +287,9 @@ const form = $("#contact-form"), status = $("#status");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const d = Object.fromEntries(new FormData(form));
+  if (d.website) { status.textContent = "Message envoyé. Merci !"; return; } /* champ piège : seuls les robots le remplissent */
+  delete d.website;
+  if (Date.now() - Number(safeGet("lastSend") || 0) < 30000) { status.textContent = "Patiente quelques secondes avant d’envoyer un nouveau message."; return; }
   /* Noms alternatifs, pour que ton ancien template EmailJS fonctionne quelles que soient ses variables */
   Object.assign(d, { name: d.from_name, user_name: d.from_name, email: d.reply_to, user_email: d.reply_to, from_email: d.reply_to, title: "Nouveau message depuis ton portfolio", time: new Date().toLocaleString("fr-FR") });
   const useEmailJS = EMAILJS.publicKey && EMAILJS.serviceId && EMAILJS.templateId;
@@ -293,7 +303,7 @@ form.addEventListener("submit", (e) => {
   const sendBtn = form.querySelector('button[type="submit"]');
   sendBtn.disabled = true;
   const send = () => emailjs.send(EMAILJS.serviceId, EMAILJS.templateId, d, { publicKey: EMAILJS.publicKey })
-    .then(() => { status.textContent = "Message envoyé. Merci !"; form.reset(); })
+    .then(() => { status.textContent = "Message envoyé. Merci !"; form.reset(); safeSet("lastSend", Date.now()); })
     .catch((err) => { console.error("Erreur EmailJS:", err); status.textContent = "L’envoi a échoué. Réessaie plus tard ou écris-moi à " + PROFILE.email + "."; })
     .finally(() => { sendBtn.disabled = false; });
   if (window.emailjs) return send();
